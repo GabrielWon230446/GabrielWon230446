@@ -26,6 +26,7 @@ parser.add_argument("--learning_rate", type=float, default=0.001)
 parser.add_argument("--batch_size", type=int, default=128)
 parser.add_argument("--n_steps", type=int, default=2048)
 parser.add_argument("--n_epochs", type=int, default=10)
+parser.add_argument("--gamma", type=float, default=0.99)
 
 args = parser.parse_args()
 
@@ -48,6 +49,7 @@ model = PPO('MlpPolicy', env, verbose=1,
             batch_size=args.batch_size, 
             n_steps=args.n_steps, 
             n_epochs=args.n_epochs, 
+            gamma=args.gamma,
             tensorboard_log=f"runs/{run.id}",)
 
 # Evaluate the policy every 10,000 steps
@@ -60,7 +62,7 @@ wandb_callback = WandbCallback()
 callbacks = [eval_callback, wandb_callback]
 
 # variable for how often to save the model
-time_steps = 100000
+time_steps = 1000000
 for i in range(10):
     # add the reset_num_timesteps=False argument to the learn function to prevent the model from resetting the timestep counter
     # add the tb_log_name argument to the learn function to log the tensorboard data to the correct folder

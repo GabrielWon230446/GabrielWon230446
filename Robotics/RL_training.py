@@ -12,7 +12,7 @@ from clearml import Task
 import tensorflow
 
 # Replace Pendulum-v1/YourName with your own project name (Folder/YourName, e.g. 2022-Y2B-RoboSuite/Michael)
-task = Task.init(project_name='Mentor Group J/Group 3/Gabriel', # NB: Replace YourName with your own name
+task = Task.init(project_name='Mentor Group J/Group 3', # NB: Replace YourName with your own name
                     task_name='PPO_OT2_2')
 
 #copy these lines exactly as they are
@@ -60,7 +60,7 @@ wandb_callback = WandbCallback()
 callbacks = [eval_callback, wandb_callback]
 
 # variable for how often to save the model
-time_steps = 1000000
+time_steps = 100000
 for i in range(10):
     # add the reset_num_timesteps=False argument to the learn function to prevent the model from resetting the timestep counter
     # add the tb_log_name argument to the learn function to log the tensorboard data to the correct folder

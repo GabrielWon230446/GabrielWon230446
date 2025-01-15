@@ -9,6 +9,7 @@ from wandb.integration.sb3 import WandbCallback
 import argparse
 import time
 from clearml import Task
+import tensorflow
 
 # Replace Pendulum-v1/YourName with your own project name (Folder/YourName, e.g. 2022-Y2B-RoboSuite/Michael)
 task = Task.init(project_name='Mentor Group J/Group 3/Gabriel', # NB: Replace YourName with your own name

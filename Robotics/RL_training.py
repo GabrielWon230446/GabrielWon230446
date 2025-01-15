@@ -22,11 +22,11 @@ task.set_base_docker('deanis/2023y2b-rl:latest')
 task.execute_remotely(queue_name="default")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--learning_rate", type=float, default=0.0004)
+parser.add_argument("--learning_rate", type=float, default=0.0005)
 parser.add_argument("--batch_size", type=int, default=128)
 parser.add_argument("--n_steps", type=int, default=2048)
 parser.add_argument("--n_epochs", type=int, default=15)
-parser.add_argument("--gamma", type=float, default=0.98)
+parser.add_argument("--gamma", type=float, default=0.96)
 
 args = parser.parse_args()
 

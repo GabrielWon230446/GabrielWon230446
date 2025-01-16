@@ -17,7 +17,7 @@ class Simulation:
         else:
             mode = p.DIRECT # for non-graphical version
         # Set up the simulation
-        self.physicsClient = p.connect(mode)
+        self.physicsClient = p.connect(p.DIRECT)
         # Hide the default GUI components
         p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
         p.setAdditionalSearchPath(pybullet_data.getDataPath()) #optionally

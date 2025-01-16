@@ -9,14 +9,14 @@ from gymnasium.envs.registration import register
 from clearml import Task
 import argparse
 
-task = Task.init(project_name='Mentor Group J/Group 3',
+'''task = Task.init(project_name='Mentor Group J/Group 3',
                     task_name='iteration 2')
 
 #copy these lines exactly as they are
 #setting the base docker image
 task.set_base_docker('deanis/2023y2b-rl:latest')
 #setting the task to run remotely on the default queue
-task.execute_remotely(queue_name="default")
+task.execute_remotely(queue_name="default")'''
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--learning_rate", type=float, default=0.0004)
@@ -88,7 +88,12 @@ def train():
     # Create environment
     env = create_env()
     eval_env = create_env()
-    
+
+    # Initialize WandB
+    run = wandb.init(
+        project="iteration 2",
+        sync_tensorboard=True
+    )
     # Initialize model
     model = PPO('MlpPolicy', env, verbose=1, 
             learning_rate=args.learning_rate, 
@@ -97,11 +102,7 @@ def train():
             n_epochs=args.n_epochs, 
             tensorboard_log=f"runs/{run.id}",)
     
-    # Initialize WandB
-    run = wandb.init(
-        project="iteration 2",
-        sync_tensorboard=True
-    )
+    
     
     # Create callbacks
     eval_callback = EvalCallback(
@@ -122,7 +123,7 @@ def train():
     # Training
     try:
         model.learn(
-            total_timesteps=500000,
+            total_timesteps=100000,
             callback=[eval_callback, wandb_callback],
             progress_bar=True
         )

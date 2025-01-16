@@ -9,7 +9,7 @@ from gymnasium.envs.registration import register
 from clearml import Task
 import argparse
 
-task = Task.init(project_name='Mentor Group J/Group 3', # NB: Replace YourName with your own name
+task = Task.init(project_name='Mentor Group J/Group 3',
                     task_name='iteration 2')
 
 #copy these lines exactly as they are

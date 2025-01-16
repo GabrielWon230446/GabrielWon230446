@@ -9,14 +9,14 @@ from gymnasium.envs.registration import register
 from clearml import Task
 import argparse
 
-'''task = Task.init(project_name='Mentor Group J/Group 3',
+task = Task.init(project_name='Mentor Group J/Group 3',
                     task_name='iteration 2')
 
 #copy these lines exactly as they are
 #setting the base docker image
 task.set_base_docker('deanis/2023y2b-rl:latest')
 #setting the task to run remotely on the default queue
-task.execute_remotely(queue_name="default")'''
+task.execute_remotely(queue_name="default")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--learning_rate", type=float, default=0.0004)

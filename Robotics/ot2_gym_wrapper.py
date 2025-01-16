@@ -38,14 +38,13 @@ class OT2Env(gym.Env):
         observation = observation.astype(np.float32)
         return observation
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         # being able to set a seed is required for reproducibility
         if seed is not None:
             np.random.seed(seed)
 
         # Reset the state of the environment to an initial state
-        # set a random goal position for the agent, consisting of x, y, and z coordinates within the working area (you determined these values in the previous datalab task)
-        
+        # set a random goal position for the agent, consisting of x, y, and z coordinates within the working area
         # YOUR CODE HERE
         # Define the working envelope corners
         envelope = {
@@ -100,15 +99,15 @@ class OT2Env(gym.Env):
         pipette_position = observation[:3]  # First 3 elements should be pipette position
         goal_position = observation[3:]    # Last 3 elements should be goal position
         
+        # Calculate the Euclidean distance between the pipette position and goal position 
         distance = np.linalg.norm(pipette_position - goal_position)
-        print(f"Distance in step{self.steps} is:{distance}")
         reward = -distance
         
         # Ensure the reward is a float
         reward = float(reward)
         
         # Check if the accuracy is within 1mm
-        threshold = 0.001 # 1mm accuracy
+        threshold = 0.01 # 1mm accuracy
         within_accuracy = distance <= threshold
         if within_accuracy:
             terminated = True
@@ -122,7 +121,7 @@ class OT2Env(gym.Env):
         # Increment the number of steps
         self.steps += 1
 
-        info = {"distance": {distance}}
+        info = {"distance": {distance}, "within_accuracy": {terminated}, "reached max steps": {truncated}}
 
         return observation, reward, terminated, truncated, info
 

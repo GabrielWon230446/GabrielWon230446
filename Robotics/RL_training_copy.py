@@ -11,19 +11,9 @@ import time
 from clearml import Task
 import tensorflow
 
-# Replace Pendulum-v1/YourName with your own project name (Folder/YourName, e.g. 2022-Y2B-RoboSuite/Michael)
-task = Task.init(project_name='Mentor Group J/Group 3', # NB: Replace YourName with your own name
-                    task_name='PPO_OT2_2')
-
-#copy these lines exactly as they are
-#setting the base docker image
-task.set_base_docker('deanis/2023y2b-rl:latest')
-#setting the task to run remotely on the default queue
-task.execute_remotely(queue_name="default")
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--learning_rate", type=float, default=0.0004)
-parser.add_argument("--batch_size", type=int, default=128)
+parser.add_argument("--batch_size", type=int, default=64)
 parser.add_argument("--n_steps", type=int, default=2048)
 parser.add_argument("--n_epochs", type=int, default=10)
 parser.add_argument("--gamma", type=float, default=0.96)
@@ -53,7 +43,7 @@ model = PPO('MlpPolicy', env, verbose=1,
             tensorboard_log=f"runs/{run.id}",)
 
 # Evaluate the policy every 10,000 steps
-eval_callback = EvalCallback(env, best_model_save_path='./logs/', log_path='./logs/', eval_freq=1000)
+eval_callback = EvalCallback(env, best_model_save_path='./logs/', log_path='./logs/', eval_freq=10000)
 
 # Integrate W&B
 wandb_callback = WandbCallback()
@@ -62,7 +52,7 @@ wandb_callback = WandbCallback()
 callbacks = [eval_callback, wandb_callback]
 
 # variable for how often to save the model
-time_steps = 100000
+time_steps = 10000
 for i in range(10):
     # add the reset_num_timesteps=False argument to the learn function to prevent the model from resetting the timestep counter
     # add the tb_log_name argument to the learn function to log the tensorboard data to the correct folder

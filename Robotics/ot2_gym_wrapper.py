@@ -101,7 +101,7 @@ class OT2Env(gym.Env):
         
         # Calculate the Euclidean distance between the pipette position and goal position 
         distance = np.linalg.norm(pipette_position - goal_position)
-        reward = -distance
+        reward = -distance**2
         
         # Ensure the reward is a float
         reward = float(reward)

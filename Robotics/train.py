@@ -3,20 +3,20 @@ import numpy as np
 import wandb
 from wandb.integration.sb3 import WandbCallback
 from stable_baselines3 import PPO
-from stable_baselines3.common.callbacks import BaseCallback, EvalCallback
-from stable_baselines3.common.monitor import Monitor
 from gymnasium.envs.registration import register
 from clearml import Task
 import argparse
 from typing_extensions import TypeIs
 import tensorflow
 import os
+from ot2_gym_wrapper import OT2Env
 
+# Activate wandb logging
 os.environ['WANDB_API_KEY'] = '1f9a653a148ce2cdf8e255b5baa6fed567eafa83'
 
 
 task = Task.init(project_name='Mentor Group J/Group 3',
-                    task_name='iteration 2')
+                    task_name='iteration 3')
 
 #copy these lines exactly as they are
 #setting the base docker image
@@ -40,41 +40,15 @@ register(
     kwargs={'render': False, 'max_steps': 1000}
 )
 
-def create_env():
-    """Create and wrap the OT2 environment."""
-    env = gym.make('OT2Env-v0')
-    env = Monitor(env)
-    return env
-
-class BestDistanceCallback(BaseCallback):
-    """
-    Custom callback to track and log the best distance achieved during training.
-    """
-    def __init__(self):
-        super(BestDistanceCallback, self).__init__()
-        self.best_distance = float("inf")  # Initialize with infinity
-
-    def _on_step(self) -> bool:
-        infos = self.locals.get("infos", [])
-        for info in infos:
-            if "distance" in info:
-                current_distance = info["distance"]
-                if isinstance(current_distance, (int, float)):
-                    if current_distance < self.best_distance:
-                        self.best_distance = current_distance
-                        # Log to WandB
-                        wandb.log({"best_distance": self.best_distance})
-        return True
-    
 def train():
     """Main training function."""
     # Create environment
-    env = create_env()
-    eval_env = create_env()
+    """Create and wrap the OT2 environment."""
+    env = OT2Env(max_steps=1000)
 
     # Initialize WandB
     run = wandb.init(
-        project="iteration 3",
+        project="iteration 4",
         sync_tensorboard=True
     )
     # Initialize model
@@ -87,40 +61,28 @@ def train():
     
     
     # Create callbacks
-    eval_callback = EvalCallback(
-        eval_env=eval_env,
-        n_eval_episodes=10,
-        eval_freq=5000,
-        log_path="eval_logs",
-        best_model_save_path="best_model",
-        deterministic=True
-    )
-    
-    wandb_callback = WandbCallback(
-        gradient_save_freq=100,
-        model_save_path=f"models/{run.id}",
-        verbose=2
-    )
-    
-    best_distance_callback = BestDistanceCallback()
+    log_dir = "tmp/"
+    os.makedirs(log_dir, exist_ok=True)
+    wandb_callback = WandbCallback(model_save_freq=10000,
+                                    model_save_path=f"models/{run.id}",
+                                    verbose=2,
+                                    )
 
     # Training
     try:
         model.learn(
-            total_timesteps=100000,
-            callback=[eval_callback, wandb_callback, best_distance_callback],
-            progress_bar=True
+            total_timesteps=1000000,
+            callback=[wandb_callback],
+            progress_bar=True, 
+            reset_num_timesteps=False,
+            tb_log_name=f"runs/{run.id}"
         )
         
         # Save final model
         model.save("final_model/ppo_ot2")
         
         print("\nTraining completed!")
-        print(f"Best distance achieved: {best_distance_callback.best_distance:.6f}m")
         print(f"Best model saved to: best_model/best_model")
-        
-        # Log best distance to WandB
-        wandb.log({"best_distance": best_distance_callback.best_distance})
         
     except Exception as e:
         print(f"Training interrupted: {e}")
@@ -128,7 +90,6 @@ def train():
     finally:
         # Clean up
         env.close()
-        eval_env.close()
         wandb.finish()
 
 if __name__ == "__main__":

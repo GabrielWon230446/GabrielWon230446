@@ -7,7 +7,7 @@ if __name__ == "__main__":
     env = OT2Env(max_steps=1000)
 
     # Initialize the PID controller
-    pid = PIDController(kp=0.1, ki=0.1, kd=0.02)
+    pid = PIDController(kp=2, ki=0.5, kd=0.1)
 
     # Reset the environment and get the initial observation
     observation, _ = env.reset()

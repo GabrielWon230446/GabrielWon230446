@@ -9,6 +9,7 @@ from gymnasium.envs.registration import register
 from clearml import Task
 import argparse
 from typing_extensions import TypeIs
+import tensorflow
 
 
 task = Task.init(project_name='Mentor Group J/Group 3',

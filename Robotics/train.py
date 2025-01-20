@@ -71,7 +71,7 @@ def train():
     # Training
     try:
         model.learn(
-            total_timesteps=1000000,
+            total_timesteps=4000000,
             callback=[wandb_callback],
             progress_bar=True, 
             reset_num_timesteps=False,

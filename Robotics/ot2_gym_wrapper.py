@@ -11,7 +11,7 @@ class OT2Env(gym.Env):
         self.max_steps = max_steps
 
         # Create the simulation environment
-        self.sim = Simulation(num_agents=1)
+        self.sim = Simulation(num_agents=1, render=True)
 
         # Define action and observation space
         # They must be gym.spaces objects
@@ -107,7 +107,7 @@ class OT2Env(gym.Env):
         reward = float(reward)
         
         # Check if the accuracy is within 1mm
-        threshold = 0.001 # 1mm accuracy
+        threshold = 0.01 # 10mm accuracy
         within_accuracy = distance <= threshold
         if within_accuracy:
             terminated = True

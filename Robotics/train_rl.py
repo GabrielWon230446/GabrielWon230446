@@ -7,8 +7,9 @@ from stable_baselines3 import PPO
 from wandb.integration.sb3 import WandbCallback
 
 # Initialize wandb project
-wandb.login()
 run = wandb.init(project="sb3_pendulum_demo", sync_tensorboard=True)
+
+os.environ['WANDB_API_KEY'] = '1f9a653a148ce2cdf8e255b5baa6fed567eafa83'
 
 # Create the environment
 env = gym.make('Pendulum-v1', g=9.81)

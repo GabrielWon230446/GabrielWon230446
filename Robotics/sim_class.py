@@ -14,10 +14,11 @@ class Simulation:
         self.rgb_array = rgb_array
         if render:
             mode = p.GUI # for graphical version
+            print("rendering")
         else:
             mode = p.DIRECT # for non-graphical version
         # Set up the simulation
-        self.physicsClient = p.connect(p.DIRECT)
+        self.physicsClient = p.connect(mode)
         # Hide the default GUI components
         p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
         p.setAdditionalSearchPath(pybullet_data.getDataPath()) #optionally

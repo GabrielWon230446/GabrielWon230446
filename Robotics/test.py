@@ -60,7 +60,7 @@ def test_training():
         
         print("All tests passed successfully!")
         print(f"Training time: {training_time:.2f} seconds")
-        print(f"Final reward: {reward}")
+        print(f"Final distance: {info['distance']}")
         
     except Exception as e:
         print(f"Test failed: {e}")

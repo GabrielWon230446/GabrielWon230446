@@ -107,7 +107,7 @@ class OT2Env(gym.Env):
         reward = float(reward)
         
         # Check if the accuracy is within 1mm
-        threshold = 0.01 # 1mm accuracy
+        threshold = 0.001 # 1mm accuracy
         within_accuracy = distance <= threshold
         if within_accuracy:
             terminated = True
@@ -121,7 +121,7 @@ class OT2Env(gym.Env):
         # Increment the number of steps
         self.steps += 1
 
-        info = {"distance": {distance}, "within_accuracy": {terminated}, "reached max steps": {truncated}}
+        info = {"distance": distance, "within_accuracy": terminated, "reached max steps": truncated}
 
         return observation, reward, terminated, truncated, info
 

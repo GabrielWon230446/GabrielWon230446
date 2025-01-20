@@ -10,16 +10,19 @@ from clearml import Task
 import argparse
 from typing_extensions import TypeIs
 import tensorflow
+import os
+
+os.environ['WANDB_API_KEY'] = '1f9a653a148ce2cdf8e255b5baa6fed567eafa83'
 
 
-'''task = Task.init(project_name='Mentor Group J/Group 3',
+task = Task.init(project_name='Mentor Group J/Group 3',
                     task_name='iteration 2')
 
 #copy these lines exactly as they are
 #setting the base docker image
 task.set_base_docker('deanis/2023y2b-rl:latest')
 #setting the task to run remotely on the default queue
-task.execute_remotely(queue_name="default")'''
+task.execute_remotely(queue_name="default")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--learning_rate", type=float, default=0.0004)
@@ -71,7 +74,7 @@ def train():
 
     # Initialize WandB
     run = wandb.init(
-        project="iteration 2",
+        project="iteration 3",
         sync_tensorboard=True
     )
     # Initialize model

@@ -16,7 +16,7 @@ os.environ['WANDB_API_KEY'] = '1f9a653a148ce2cdf8e255b5baa6fed567eafa83'
 
 
 task = Task.init(project_name='Mentor Group J/Group 3',
-                    task_name='iteration 3')
+                    task_name='iteration 4')
 
 #copy these lines exactly as they are
 #setting the base docker image

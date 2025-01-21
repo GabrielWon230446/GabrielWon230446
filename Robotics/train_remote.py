@@ -63,7 +63,7 @@ def train():
     # Create callbacks
     log_dir = "tmp/"
     os.makedirs(log_dir, exist_ok=True)
-    wandb_callback = WandbCallback(model_save_freq=100000,
+    wandb_callback = WandbCallback(model_save_freq=1000000,
                                     model_save_path=f"models/{run.id}",
                                     verbose=2,
                                     )

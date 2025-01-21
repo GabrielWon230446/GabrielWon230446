@@ -15,14 +15,14 @@ from ot2_gym_wrapper import OT2Env
 os.environ['WANDB_API_KEY'] = '1f9a653a148ce2cdf8e255b5baa6fed567eafa83'
 
 
-'''task = Task.init(project_name='Mentor Group J/Group 3',
+task = Task.init(project_name='Mentor Group J/Group 3',
                     task_name='iteration 4')
 
 #copy these lines exactly as they are
 #setting the base docker image
 task.set_base_docker('deanis/2023y2b-rl:latest')
 #setting the task to run remotely on the default queue
-task.execute_remotely(queue_name="default")'''
+task.execute_remotely(queue_name="default")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--learning_rate", type=float, default=0.0002)
@@ -44,7 +44,7 @@ def train():
     """Main training function."""
     # Create environment
     """Create and wrap the OT2 environment."""
-    env = OT2Env(max_steps=1000)
+    env = OT2Env(max_steps=1000, render=False)
 
     # Initialize WandB
     run = wandb.init(
@@ -71,7 +71,7 @@ def train():
     # Training
     try:
         model.learn(
-            total_timesteps=1000000,
+            total_timesteps=4000000,
             callback=[wandb_callback],
             progress_bar=True, 
             reset_num_timesteps=False,

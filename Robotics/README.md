@@ -1,9 +1,34 @@
-# OT2_Twin in a Simulation Environment
-## Features:
+# Robotic Simulation with PID and Reinforcement Learning
+
+This project sets up a robotic simulation environment where a robot arm is guided to a goal position using both a classical PID controller and reinforcement learning (RL). The simulation supports sensor feedback for situational awareness and enables training of RL agents for control tasks.
+
+## 📦 Project Structure
+
+| File | Description |
+|------|-------------|
+| `pid_controller.py` | Implements a PID controller for classical control. |
+| `sim_class.py` | Defines the custom simulation environment logic. |
+| `eva.py`, `ot2_gym_wrapper.py` | Wrappers and utilities for gym integration. |
+| `RL_training.py`, `train.py` | Train RL agents in the environment. |
+| `test.py`, `run_pid_with_env.py` | Run evaluation using PID or RL policies. |
+| `custom.urdf`, `ot_2_simulation_v6.urdf` | URDF files describing the robot setup. |
+| `clearml.png`, `RL_1000000.png` | Visual results and experiment tracking screenshot. |
+| `README.md` | This file. |
+
+---
+
+##  Features
+- Simulated robotic environment using a custom class.
+- PID-based control for reaching 3D target positions and execute actions such as dropping the liquid on given coordinates.
+- RL training using stable-baselines3 PPO.
+- Real-time sensor feedback via position readings.
+- ClearML integration for experiment tracking.
+
+## Calculate the working envolope:
 Move the tip of the pipette to each corner of the cube that forms the working envelope by adjusting the motor velocities for each axis and recording the co-ordinates at each of the 8 points.
 
 ## Usage:
-Run the task9.py file
+Run the task9.py file to calculate the working envolope
 
 ## Dependencies:
 - python (3.10.15)

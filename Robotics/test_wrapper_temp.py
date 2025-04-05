@@ -24,7 +24,7 @@ print("Model loaded successfully!")
 print("Model's observation space:", model.observation_space)
 
 # Define test parameters
-num_tests = 100  # Number of random test episodes
+num_tests = 1000  # Number of random test episodes
 threshold = 0.001  # 1mm accuracy threshold
 
 # Environment for testing

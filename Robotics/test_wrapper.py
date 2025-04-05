@@ -5,9 +5,8 @@ from gymnasium import spaces
 import numpy as np
 from sim_class import Simulation
 
-# instantiate your custom environment
-wrapped_env = OT2Env(gym.Env) # modify this to match your wrapper class
 
-# Assuming 'wrapped_env' is your wrapped environment instance
+wrapped_env = OT2Env(gym.Env)
+
 
 check_env(wrapped_env)

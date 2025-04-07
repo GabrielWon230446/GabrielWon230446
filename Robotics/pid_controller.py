@@ -14,7 +14,6 @@ class PIDController:
         self.kp = kp
         self.ki = ki
         self.kd = kd
-        self.accuracy_requirement = accuracy_requirement
 
         # Initialize error terms
         self.prev_error = None
@@ -34,10 +33,6 @@ class PIDController:
         """
         error = goal_position - current_position
         distance = np.linalg.norm(error)
-
-        # Check if the position is within the accuracy requirement
-        if distance <= self.accuracy_requirement:
-            return np.zeros_like(error)  # No action needed
 
         # Proportional term
         proportional = self.kp * error

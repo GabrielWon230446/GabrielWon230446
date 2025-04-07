@@ -74,7 +74,7 @@ if __name__ == "__main__":
         print(f"Action: {action}, Current Position: {current_position}, Accuracy: {accuracy:.6f} m")
 
         if accuracy < 0.001:
-            done = True
+            done = True # End the simulation if the accuracy requirement is met
 
     print(f"Final Accuracy: {accuracy:.6f} m")
     print(f"PID Gains: kp={pid_x.kp}, ki={pid_x.ki}, kd={pid_x.kd}")

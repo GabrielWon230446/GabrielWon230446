@@ -1,0 +1,9 @@
+rendering
+Traceback (most recent call last):
+  File "D:\BUAS_CODES\GabrielWon230446\Robotics\RL_training_copy.py", line 34, in <module>
+    env = OT2Env(gym.Env)
+  File "D:\BUAS_CODES\GabrielWon230446\Robotics\ot2_gym_wrapper.py", line 14, in __init__
+    self.sim = Simulation(num_agents=1, render=render)
+  File "D:\BUAS_CODES\GabrielWon230446\Robotics\sim_class.py", line 28, in __init__
+    texture_list = os.listdir("textures")
+FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'textures'

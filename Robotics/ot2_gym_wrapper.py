@@ -5,7 +5,7 @@ from sim_class import Simulation
 from typing_extensions import TypeIs
 
 class OT2Env(gym.Env):
-    def __init__(self, render=False, max_steps=1000):
+    def __init__(self, render=True, max_steps=4096):
         super(OT2Env, self).__init__()
         self.render = render
         self.max_steps = max_steps
@@ -86,12 +86,14 @@ class OT2Env(gym.Env):
         return observation, {}
 
     def step(self, action):
+        #print("Action before run:", action)
         # Execute one time step within the environment
+        #action = self.action_space.sample() # Generate a random action
         action = np.append(action, 0)  # Append 0 for the drop action
 
         # Call the environment step function
         raw_observation = self.sim.run([action])
-        
+        #print("Observation after run:", raw_observation)
         # Process the observation
         observation = self.pipette_position_extractor(raw_observation, self.goal_position)
 
@@ -99,15 +101,15 @@ class OT2Env(gym.Env):
         pipette_position = observation[:3]  # First 3 elements should be pipette position
         goal_position = observation[3:]    # Last 3 elements should be goal position
         
-        # Calculate the Euclidean distance between the pipette position and goal position 
+        # Calculate the squared Euclidean distance between the pipette position and goal position as the reward
         distance = np.linalg.norm(pipette_position - goal_position)
-        reward = -distance**2
-        
+        reward = -distance  # Squared negative reward for distance to encourage the agent to minimize it (more sensitive to larger errors)
+
         # Ensure the reward is a float
         reward = float(reward)
         
         # Check if the accuracy is within 1mm
-        threshold = 0.001 # 10mm accuracy
+        threshold = 0.001 # 1mm accuracy
         within_accuracy = distance <= threshold
         if within_accuracy:
             terminated = True
@@ -126,8 +128,8 @@ class OT2Env(gym.Env):
         return observation, reward, terminated, truncated, info
 
 
-    def render(self, mode='human'):
-        pass
+    #def render(self, mode='human'):
+        #pass
     
     def close(self):
         self.sim.close()

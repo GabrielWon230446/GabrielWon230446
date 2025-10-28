@@ -1,12 +1,30 @@
-from stable_baselines3.common.env_checker import check_env
 from ot2_gym_wrapper import OT2Env
-import gymnasium as gym
-from gymnasium import spaces
-import numpy as np
-from sim_class import Simulation
 
+# Load the custom environment
+env = OT2Env(render=False, max_steps=1000)
 
-wrapped_env = OT2Env(gym.Env)
+# Number of episodes
+num_episodes = 5
 
+for episode in range(num_episodes):
+    obs, _ = env.reset()  # Gymnasium reset returns (obs, info)
+    done = False
+    step = 0
 
-check_env(wrapped_env)
+    while not done:
+        # Take a random action from the environment's action space
+        action = env.action_space.sample()
+
+        obs, reward, terminated, truncated, info = env.step(action)
+        done = terminated or truncated
+
+        print(f"Episode: {episode + 1}, Step: {step + 1}, Action: {action}, Reward: {reward}")
+
+        step += 1
+
+        if done:
+            print(f"Episode finished after {step} steps. Info: {info}")
+            break
+
+env.close()
+

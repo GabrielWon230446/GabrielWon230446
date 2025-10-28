@@ -1,8 +1,10 @@
 import numpy as np
+import time
+import json
 from pid_controller import PIDController
 from sim_class import Simulation
 
-def gen_goal():
+def gen_goal(): # Generate random goal within the working envelope
     envelope = {
             'top_left_front_corner': [0.2534, -0.1705, 0.2895],
             'top_left_back_corner': [-0.187, -0.1705, 0.2895],
@@ -39,17 +41,24 @@ if __name__ == "__main__":
     current_position = np.array(status[robotId]['pipette_position'])
 
     # Initialize the PID controller
-    pid_x = PIDController(kp=2, ki=0.5, kd=0.1)
-    pid_y = PIDController(kp=2, ki=0.5, kd=0.1)
-    pid_z = PIDController(kp=2, ki=0.5, kd=0.1)
+    pid_x = PIDController(kp=3, ki=0.1, kd=0.5)
+    pid_y = PIDController(kp=3, ki=0.1, kd=0.5)
+    pid_z = PIDController(kp=3, ki=0.1, kd=0.5)
 
     # Reset the environment and generate a new goal position
     goal_position = gen_goal()
 
     done = False
-    dt = 1.6  # Time step in seconds
+    dt = 0.005  # Time step in seconds
+
+    # Time and performance tracking
+    start_time = time.time()
+    step = 0
+    accuracy_history = []
 
     while not done:
+        step += 1
+
         # Compute the action using the PID controller
         action_x = pid_x.compute_action(current_position[0], goal_position[0], dt)
         action_y = pid_y.compute_action(current_position[1], goal_position[1], dt)
@@ -57,7 +66,7 @@ if __name__ == "__main__":
 
         action = [action_x, action_y, action_z, 0]
 
-        action = np.append(action, 0)
+        #action = np.append(action, 0)
         print(action)
 
         # Run the simulation
@@ -76,6 +85,32 @@ if __name__ == "__main__":
         if accuracy < 0.001:
             done = True # End the simulation if the accuracy requirement is met
 
-    print(f"Final Accuracy: {accuracy:.6f} m")
-    print(f"PID Gains: kp={pid_x.kp}, ki={pid_x.ki}, kd={pid_x.kd}")
+    # Final results calculation
+    end_time = time.time()
+    total_time = end_time - start_time
+    final_accuracy = accuracy
+
+    results = {
+        "total_steps": step, 
+        "final_distance_from_goal": final_accuracy,
+        "PID Gains": {
+            "kp": pid_x.kp,
+            "ki": pid_x.ki, 
+            "kd": pid_x.kd # Same gains for each axis
+        },
+        "total_time_seconds": total_time,
+        'goal_position': goal_position.tolist(),
+        'final_position': current_position.tolist()
+    }
+    timestamp = time.strftime('%Y%m%d_%H%M%S')
+    results_filename = f"pid_results_{timestamp}.json"
+    with open(results_filename, 'w') as f:
+        json.dump(results, f, indent=2)
+    print(f"Results saved to: {results_filename}")
+    print(f"\n=== FINAL RESULTS ===")
+    print(f"Total Steps: {results['total_steps']}")
+    print(f"Total Time: {results['total_time_seconds']:.2f} seconds") 
+    print(f"Final Distance from Goal: {results['final_distance_from_goal']:.6f} m")
+    print(f"PID Gains: Kp={results['PID Gains']['kp']}, Ki={results['PID Gains']['ki']}, Kd={results['PID Gains']['kd']}")
+
     sim.close()

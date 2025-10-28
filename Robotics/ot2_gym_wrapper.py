@@ -103,7 +103,7 @@ class OT2Env(gym.Env):
         
         # Calculate the squared Euclidean distance between the pipette position and goal position as the reward
         distance = np.linalg.norm(pipette_position - goal_position)
-        reward = -distance  # Squared negative reward for distance to encourage the agent to minimize it (more sensitive to larger errors)
+        reward = -distance  # Negative reward for distance to encourage the agent to minimize it (more sensitive to larger errors)
 
         # Ensure the reward is a float
         reward = float(reward)
@@ -113,17 +113,18 @@ class OT2Env(gym.Env):
         within_accuracy = distance <= threshold
         if within_accuracy:
             terminated = True
-            reward += 10  # Add positive reward for completing the task
+            reward += 20  # Add positive reward for completing the task
         else:
             terminated = False
 
+        # Increment the number of steps
+        self.steps += 1
+        
         # Check if the episode should be truncated
         truncated = self.steps >=self.max_steps
 
-        # Increment the number of steps
-        self.steps += 1
 
-        info = {"distance": distance, "within_accuracy": terminated, "reached max steps": truncated}
+        info = {"distance": distance, "within_accuracy": within_accuracy, "reached max steps": truncated}
 
         return observation, reward, terminated, truncated, info
 

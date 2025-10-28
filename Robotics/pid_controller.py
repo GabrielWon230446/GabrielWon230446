@@ -1,7 +1,8 @@
 import numpy as np
 
+
 class PIDController:
-    def __init__(self, kp, ki, kd, accuracy_requirement=0.001):
+    def __init__(self, kp, ki, kd):
         """
         Initialize the PID controller with given parameters.
 
@@ -32,7 +33,7 @@ class PIDController:
             np.ndarray: PID computed action (x, y, z).
         """
         error = goal_position - current_position
-        distance = np.linalg.norm(error)
+        #distance = np.linalg.norm(error)
 
         # Proportional term
         proportional = self.kp * error
